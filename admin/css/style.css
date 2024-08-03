@@ -1,0 +1,133 @@
+.card-header h5{
+  margin-left: -15px;
+}
+.dataTable-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+<<<<<<< HEAD
+  margin-bottom: 15px; /* Khoảng cách dưới phần dataTable-top */
+=======
+  margin-bottom: 15px; 
+>>>>>>> d38c23b (sửa lỗi mua ngay)
+}
+
+
+.dataTable-selector {
+<<<<<<< HEAD
+  width: 80px; /* Độ rộng của dropdown */
+  margin-right: 5px; /* Khoảng cách giữa dropdown và label */
+=======
+  width: 80px;
+  margin-right: 5px;
+>>>>>>> d38c23b (sửa lỗi mua ngay)
+}
+
+.dataTable-search input {
+  padding: 8px;
+<<<<<<< HEAD
+  border: 1px solid #ced4da; /* Màu viền ô tìm kiếm */
+  border-radius: 4px;
+  width: 250px; /* Độ rộng của ô tìm kiếm */
+}
+
+.dataTable-search input::placeholder {
+  color: #6c757d; /* Màu chữ placeholder */
+}
+
+.dataTable-dropdown label {
+  margin-left: 5px; /* Khoảng cách giữa dropdown và label */
+  font-size: 0.9rem; /* Kích thước font cho label */
+  color: #6c757d; /* Màu chữ của label */
+=======
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 250px; 
+}
+
+.dataTable-search input::placeholder {
+  color: #6c757d; 
+}
+
+.dataTable-dropdown label {
+  margin-left: 5px; 
+  font-size: 0.9rem; 
+  color: #6c757d; 
+>>>>>>> d38c23b (sửa lỗi mua ngay)
+}
+
+/* CSS cho phần phân trang */
+.pagination-primary {
+  margin: 0; /* Reset margin của pagination để không tạo khoảng cách với các phần khác */
+  list-style: none; /* Ẩn dấu chấm của list */
+  display: flex; /* Hiển thị các nút pagination theo chiều ngang */
+}
+
+.pagination-primary li {
+  margin-right: 5px; /* Khoảng cách giữa các nút pagination */
+}
+
+.page-link {
+  border-radius: 8px; /* Bo góc cho nút pagination */
+  color: #007bff; /* Màu chữ cho nút pagination */
+  background-color: #ffffff; /* Màu nền cho nút pagination */
+  border: 1px solid #007bff; /* Viền cho nút pagination */
+  transition: all 0.3s ease; /* Hiệu ứng chuyển động */
+  padding: 8px 12px; /* Độ rộng và chiều cao của nút */
+}
+
+.page-link:hover {
+  background-color: #007bff; /* Màu nền khi hover trên nút pagination */
+  color: #ffffff; /* Màu chữ khi hover trên nút pagination */
+}
+
+.page-item.active .page-link {
+  background-color: #007bff; /* Màu nền của nút pagination khi ở trạng thái active */
+  color: #ffffff; /* Màu chữ của nút pagination khi ở trạng thái active */
+  border: 1px solid #007bff; /* Viền của nút pagination khi ở trạng thái active */
+}
+
+.dataTable-dropdown label{
+  display: none;
+}
+.dataTable-info{
+  visibility: hidden;
+}
+
+.align-right {
+  text-align: right;
+}
+
+/* .scrollable-table {
+  max-height: 400px;
+        overflow-y: auto;
+        display: block;
+        width: 100%;
+} */
+.btn svg {
+  margin-bottom: 4px;
+}
+
+
+#imagePreview,#videoPreview {
+  height: 100px;
+  margin: 10px 20px 20px 10px;
+  object-fit: cover; 
+  border-radius: 2px;
+} 
+
+.total {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: right;
+}
+
+
+
+
