@@ -11,7 +11,9 @@ session_start(); ?>
 
 //xử lí thanh toán
 $vnp_ResponseCode = isset($_GET['vnp_ResponseCode']) ? $_GET['vnp_ResponseCode'] : '';
-if ($_GET['vnp_ResponseCode'] == '00') {
+$resultCode = isset($_GET['resultCode']) ? $_GET['resultCode'] : '';
+
+if ($vnp_ResponseCode == '00' || $resultCode == '0') {
     // Thanh toán thành công
     $order_info = $_SESSION['order_info'];
     $codedh = $order_info['codedh'];
@@ -51,22 +53,40 @@ if ($_GET['vnp_ResponseCode'] == '00') {
                     <br> MONG BẠN LUÔN ỦNG HỘ CỬA HÀNG CHÚNG TÔI.';
 
 
+    if ($vnp_ResponseCode == '00') {
 
-    //cập nhật dữ liệu vào bảng vnpay
-    $vnp_TxnRef = isset($_GET['vnp_TxnRef']) ? $_GET['vnp_TxnRef'] : '';
-    $vnp_TransactionNo = isset($_GET['vnp_TransactionNo']) ? $_GET['vnp_TransactionNo'] : '';
-    $vnp_CardType = isset($_GET['vnp_CardType']) ? $_GET['vnp_CardType'] : '';
-    $vnp_BankTranNo = isset($_GET['vnp_BankTranNo']) ? $_GET['vnp_BankTranNo'] : '';
-    $vnp_OrderInfo = isset($_GET['vnp_OrderInfo']) ? $_GET['vnp_OrderInfo'] : '';
-    $vnp_Amount = isset($_GET['vnp_Amount']) ? $_GET['vnp_Amount'] : '';
-    $vnp_BankCode = isset($_GET['vnp_BankCode']) ? $_GET['vnp_BankCode'] : '';
-    $vnp_ResponseCode = isset($_GET['vnp_ResponseCode']) ? $_GET['vnp_ResponseCode'] : '';
-    $vnp_PayDate = isset($_GET['vnp_PayDate']) ? $_GET['vnp_PayDate'] : '';
-    $vnp_TmnCode = isset($_GET['vnp_TmnCode']) ? $_GET['vnp_TmnCode'] : '';
+        //cập nhật dữ liệu vào bảng vnpay
+        $vnp_TxnRef = isset($_GET['vnp_TxnRef']) ? $_GET['vnp_TxnRef'] : '';
+        $vnp_TransactionNo = isset($_GET['vnp_TransactionNo']) ? $_GET['vnp_TransactionNo'] : '';
+        $vnp_CardType = isset($_GET['vnp_CardType']) ? $_GET['vnp_CardType'] : '';
+        $vnp_BankTranNo = isset($_GET['vnp_BankTranNo']) ? $_GET['vnp_BankTranNo'] : '';
+        $vnp_OrderInfo = isset($_GET['vnp_OrderInfo']) ? $_GET['vnp_OrderInfo'] : '';
+        $vnp_Amount = isset($_GET['vnp_Amount']) ? $_GET['vnp_Amount'] : '';
+        $vnp_BankCode = isset($_GET['vnp_BankCode']) ? $_GET['vnp_BankCode'] : '';
+        $vnp_ResponseCode = isset($_GET['vnp_ResponseCode']) ? $_GET['vnp_ResponseCode'] : '';
+        $vnp_PayDate = isset($_GET['vnp_PayDate']) ? $_GET['vnp_PayDate'] : '';
+        $vnp_TmnCode = isset($_GET['vnp_TmnCode']) ? $_GET['vnp_TmnCode'] : '';
 
-    $sql_update_vnp = "INSERT INTO vnpay (id_vnp, vnp_amount, vnp_bankcode, vnp_banktranno, vnp_cardtype, vnp_orderinfo, vnp_paydate, vnp_tmncode, vnp_transactionno) 
-    VALUES ('$vnp_TxnRef', '$vnp_Amount', '$vnp_BankCode', '$vnp_BankTranNo', '$vnp_CardType', '$vnp_OrderInfo', '$vnp_PayDate', '$vnp_TmnCode', '$vnp_TransactionNo')";
-    $mysqli->query($sql_update_vnp);
+        $sql_update_vnp = "INSERT INTO vnpay (id_vnp, vnp_amount, vnp_bankcode, vnp_banktranno, vnp_cardtype, vnp_orderinfo, vnp_paydate, vnp_tmncode, vnp_transactionno) 
+        VALUES ('$vnp_TxnRef', '$vnp_Amount', '$vnp_BankCode', '$vnp_BankTranNo', '$vnp_CardType', '$vnp_OrderInfo', '$vnp_PayDate', '$vnp_TmnCode', '$vnp_TransactionNo')";
+        $mysqli->query($sql_update_vnp);
+    }
+
+
+    if ($resultCode == '0') {
+
+        $orderId = isset($_POST['orderId']) ? $_POST['orderId'] : '';
+        $partnerCode = isset($_POST['partnerCode']) ? $_POST['partnerCode'] : '';
+        $orderInfo = isset($_POST['orderInfo']) ? $_POST['orderInfo'] : '';
+        $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
+        $orderType = isset($_POST['orderType']) ? $_POST['orderType'] : '';
+        $transId = isset($_POST['transId']) ? $_POST['transId'] : '';
+        $responseTime = isset($_POST['responseTime']) ? $_POST['responseTime'] : '';
+
+        $sql_update_momo = "INSERT INTO momo (id_momo, partner_code, order_info, amount, order_type, trans_id, response_time) 
+        VALUES ('$orderId', '$partnerCode', '$orderInfo', '$amount', '$orderType', '$transId', '$vnp_PayDate', '$responseTime')";
+        $mysqli->query($sql_update_momo);
+    }
 } else {
     $mesg = 'THANH TOÁN TẤT BẠI.';
 }

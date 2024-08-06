@@ -3476,5 +3476,37 @@ a#admin{
   position: absolute;
 }
 
+/* //thong báo */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000000000;
+}
+.message-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.close-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #1c1c1d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.close-btn:hover {
+  opacity: 0.9;
+}
 
 

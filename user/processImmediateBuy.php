@@ -11,13 +11,14 @@ session_start();
 
 <?php include 'header.php'; ?>
 
+
 <body>
     <!-- top-header-->
     <?php include "navbar.php"; ?>
 
     <div class="space-medium">
         <div class="container-fluid">
-            <form name="formorder" id="ffi" method="POST" action="payment-processing.php">
+            <form name="formorder" id="ffi" method="POST" target="_parent" enctype="application/x-www-form-urlencoded" action="payment-processing.php">
 
                 <div class="row">
                     <div class="col-12">
@@ -165,11 +166,16 @@ session_start();
                                 <div>
                                     <div class="form-group">
                                         <input type="radio" id="tienmat" name="payment" value="tienmat" checked>
-                                        <label for="tienmat">Tiền mặt</label><br>
+                                        <label for="tienmat"><img src="./images/cash.png" style="width: 25px; height: 25px;"> Tiền mặt</label><br>
                                         <input type="radio" id="VNPay" name="payment" value="vnpay">
                                         <label for="VNPay"><img src="./images/vnpay-image.jpg" style="width: 25px; height: 25px;"> VNPay</label><br>
-                                        <input type="radio" id="momo" name="payment" value="momo">
-                                        <label for="momo"><img src="./images/momo-image.jpg" style="width: 25px; height: 25px;"> Momo</label>
+
+
+                                        <input type="radio" id="momo_qr" name="payment" value="momo_qr">
+                                        <label for="momo_qr"><img src="./images/momo-image.jpg" style="width: 25px; height: 25px;"> Momo QR</label><br>
+                                        <input type="radio" id="momo_atm" name="payment" value="momo_atm">
+                                        <label for="momo_atm"><img src="./images/momo-image.jpg" style="width: 25px; height: 25px;"> Momo ATM</label>
+
                                     </div>
 
                                 </div>
@@ -181,9 +187,13 @@ session_start();
             </form>
         </div>
     </div>
+
+
     <!-- /.cart-section -->
     <!-- footer -->
     <?php include "footer.php"; ?>
+
+
     <!-- /.footer -->
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -208,5 +218,23 @@ session_start();
     });
 </script>
 
+<?php $message = isset($_SESSION['message']) ? $_SESSION['message'] : '';
+if ($message) {
+    unset($_SESSION['message']);
+}
+if ($message) : ?>
+    <div class="overlay">
+        <div class="message-box">
+            <p><?php echo htmlspecialchars($message); ?></p>
+            <button class="close-btn" onclick="closeMessageBox()">Đóng</button>
+        </div>
+    </div>
+    <script>
+        function closeMessageBox() {
+            document.querySelector('.overlay').style.display = 'none';
+
+        }
+    </script>
+<?php endif; ?>
 
 </html>

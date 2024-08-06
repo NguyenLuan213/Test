@@ -126,43 +126,168 @@ if ($cart_payment == 'tienmat') {
     }
     header('Location: ' . $vnp_Url);
     exit();
+} elseif ($cart_payment == 'momo_qr') {
+    header('Content-type: text/html; charset=utf-8');
+
+    function execPostRequest($url, $data)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data)
+            )
+        );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
+    $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
+
+    $vnp_Amount = $_POST['vnp_Amount'];
+    $partnerCode = 'MOMOBKUN20180529';
+    $accessKey = 'klm05TvNBzhg7h7j';
+    $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
+
+    $orderInfo = "Thanh toán qua mã QR MoMo";
+    $amount =  trim($vnp_Amount); // Remove the dollar sign
+    $orderId = $codedh;
+    $redirectUrl = "http://localhost/user/confirm.php";
+    $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+    $extraData = "";
+
+    $requestId = time() . "";
+    $requestType = "captureWallet";
+    $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl
+        . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl="
+        . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+
+    $signature = hash_hmac("sha256", $rawHash, $secretKey);
+
+    // Debug output
+    echo "Raw Hash: " . $rawHash . "<br>";
+    echo "Signature: " . $rawHash . "<br>";
+
+    $data = array(
+        'partnerCode' => $partnerCode,
+        'partnerName' => "Test",
+        "storeId" => "MomoTestStore",
+        'requestId' => $requestId,
+        'amount' => $amount,
+        'orderId' => $orderId,
+        'orderInfo' => $orderInfo,
+        'redirectUrl' => $redirectUrl,
+        'ipnUrl' => $ipnUrl,
+        'lang' => 'vi',
+        'extraData' => $extraData,
+        'requestType' => $requestType,
+        'signature' => $signature
+    );
+
+    $result = execPostRequest($endpoint, json_encode($data));
+    $jsonResult = json_decode($result, true);  // decode json
+
+    if (isset($jsonResult['payUrl'])) {
+        header('Location: ' . $jsonResult['payUrl']);
+    } else {
+        $_SESSION['message'] = 'Số tiền thanh toán vượt mức cho phép (50,000,000).';
+        header('Location: processImmediateBuy.php');
+
+        // echo "Error: ";
+        // print_r($jsonResult);
+    }
+} elseif ($cart_payment == 'momo_atm') {
+    header('Content-type: text/html; charset=utf-8');
 
 
+    function execPostRequest($url, $data)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data)
+            )
+        );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        //execute post
+        $result = curl_exec($ch);
+        //close connection
+        curl_close($ch);
+        return $result;
+    }
 
 
+    $_SESSION['order_info'] = array(
+        'codedh' => $codedh,
+        'MaND' => $MaND,
+        'DiaChiHD' => $DiaChiHD,
+        'TenNguoiNhan' => $TenNguoiNhan,
+        'SDT' => $SDT,
+        'cart_payment' => $cart_payment,
+        'soluong' => isset($_POST['quantity']) ? $_POST['quantity'] : 1,
+        'masp' => isset($_GET['idsp']) ? $_GET['idsp'] : $_POST['idsp'],
+        'AllPayOrders' => isset($_POST['AllPayOrders']) ? $_POST['AllPayOrders'] : null
+    );
 
-    // if (isset($_POST['order'])) {
+    $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
 
-    //     $soluong = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
-    //     $masp = isset($_GET['idsp']) ? $_GET['idsp'] : $_POST['idsp'];
-    // $sql_update_hoadon = "INSERT INTO hoadon (CodeDH, NgayLap, MaND, DiaChiHD, TenNguoiNhan, SDT, ThanhToan) VALUES ('$codedh', NOW(), '$MaND', '$DiaChiHD' , '$TenNguoiNhan', '$SDT', '$cart_payment')";
-    // $mysqli->query($sql_update_hoadon);
-    // $sql_update_cthoadon = "INSERT INTO chitiethoadon (MaSP,CodeDH,SoLuongMua) VALUES ($masp,'$codedh', $soluong)";
-    // $mysqli->query($sql_update_cthoadon);
-    // $sql_update_soluongsp = "UPDATE sanpham SET SoLuong = SoLuong - $soluong WHERE MaSP = '" . $masp . "' ";
-    // $mysqli->query($sql_update_soluongsp);
-    //     header('Location: confirm.php');
-    //     die();
-    // }
-    // if (isset($_POST['AllPayOrders'])) {
-    //     header('Location: ' . $vnp_Url);
-    //     $sql_update_hoadon = "INSERT INTO hoadon (CodeDH, NgayLap, MaND, DiaChiHD, TenNguoiNhan, SDT, ThanhToan) VALUES ('$codedh', NOW(), '$MaND','$DiaChiHD', '$TenNguoiNhan', '$SDT', '$cart_payment' )";
-    //     $mysqli->query($sql_update_hoadon);
-    //     foreach ($_SESSION['giohang'] as $key => $value) {
-    //         $idsp = $value['MaSP'];
-    //         $tensp = $value['TenSP'];
-    //         $giahientai = $value['GiaHienTai'];
-    //         $soluongsp = $value['soluongsp'];
+    $vnp_Amount = $_POST['vnp_Amount'];
+    $partnerCode = 'MOMOBKUN20180529';
+    $accessKey = 'klm05TvNBzhg7h7j';
+    $secretKey = 'at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa';
 
-    //         $sql_update_cthoadon = "INSERT INTO chitiethoadon (MaSP,CodeDH,SoLuongMua) VALUES ($idsp,'$codedh', $soluongsp)";
-    //         $mysqli->query($sql_update_cthoadon);
-    //         $sql_update_soluongsp = "UPDATE sanpham SET SoLuong = SoLuong - $soluongsp WHERE MaSP = '" . $idsp . "' ";
-    //         $mysqli->query($sql_update_soluongsp);
-    //     }
-    //     unset($_SESSION["giohang"]);
-    //     header('Location: confirm.php');
-    //     die();
-    // }
-} elseif ($cart_payment == 'momo') {
-    echo 'thanh toán bằng momo';
+    $orderInfo = "Thanh toán qua ATM MoMo";
+    $amount =  trim($vnp_Amount); // Remove the dollar sign
+    $orderId = $codedh;
+    $redirectUrl = "http://localhost/user/confirm.php";
+    $ipnUrl = "https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b";
+    $extraData = "";
+
+    $requestId = time() . "";
+    $requestType = "payWithATM";
+    // $extraData = ($_POST["extraData"] ? $_POST["extraData"] : "");
+    //before sign HMAC SHA256 signature
+    $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
+    $signature = hash_hmac("sha256", $rawHash, $secretKey);
+    $data = array(
+        'partnerCode' => $partnerCode,
+        'partnerName' => "Test",
+        "storeId" => "MomoTestStore",
+        'requestId' => $requestId,
+        'amount' => $amount,
+        'orderId' => $orderId,
+        'orderInfo' => $orderInfo,
+        'redirectUrl' => $redirectUrl,
+        'ipnUrl' => $ipnUrl,
+        'lang' => 'vi',
+        'extraData' => $extraData,
+        'requestType' => $requestType,
+        'signature' => $signature
+    );
+    $result = execPostRequest($endpoint, json_encode($data));
+    $jsonResult = json_decode($result, true);  // decode json
+
+    //Just a example, please check more in there
+
+    if (isset($jsonResult['payUrl'])) {
+        header('Location: ' . $jsonResult['payUrl']);
+    } else {
+        $_SESSION['message'] = 'Số tiền thanh toán vượt mức cho phép (50,000,000).';
+        header('Location: processImmediateBuy.php');
+    }
 }
