@@ -3,13 +3,10 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 06, 2024 lúc 10:45 AM
+-- Thời gian đã tạo: Th8 08, 2024 lúc 10:03 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
-DROP DATABASE IF EXISTS web_mobile;
-CREATE DATABASE web_mobile CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-USE web_mobile;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -35,6 +32,15 @@ CREATE TABLE `chitiethoadon` (
   `MaSP` int(11) NOT NULL,
   `SoLuongMua` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `chitiethoadon`
+--
+
+INSERT INTO `chitiethoadon` (`CodeDH`, `MaSP`, `SoLuongMua`) VALUES
+('DH-93599C15', 18, 1),
+('DH-93599C15', 21, 2),
+('DH-9B797E95', 18, 2);
 
 -- --------------------------------------------------------
 
@@ -86,8 +92,17 @@ CREATE TABLE `hoadon` (
   `ThanhToan` varchar(50) NOT NULL,
   `TrangThai` int(11) NOT NULL,
   `NgayLap` date DEFAULT NULL,
-  `MaND` int(11) DEFAULT NULL
+  `MaND` int(11) DEFAULT NULL,
+  `DaHuy` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `hoadon`
+--
+
+INSERT INTO `hoadon` (`MaHD`, `CodeDH`, `TenNguoiNhan`, `DiaChiHD`, `SDT`, `ThanhToan`, `TrangThai`, `NgayLap`, `MaND`, `DaHuy`) VALUES
+(75, 'DH-93599C15', 'Nguyễn Luân', 'Đà Nẵng', '0905481608', 'vnpay', 0, '2024-08-06', 1, 1),
+(76, 'DH-9B797E95', 'Nguyễn Luân', 'D', '0905481608', 'vnpay', 0, '2024-08-06', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -110,11 +125,11 @@ CREATE TABLE `menu` (
 INSERT INTO `menu` (`MaMenu`, `TenMenu`, `ThuTu`, `Link`, `MaQuyen`) VALUES
 (1, 'Trang chủ', 1, 'index.php', 1),
 (2, 'Điện thoại', 2, 'product-list.php', 1),
-(3, 'Laptop', 3, 'product-list.php', 1),
-(4, 'Phụ Kiện', 4, 'contact.php', 1),
-(5, 'Ưu đãi', 4, 'contact.php', 1),
-(6, 'Tin công nghệ', 6, 'contact.php', 1),
-(7, 'Liên Hệ', 7, 'contact.php', 1);
+(3, 'Laptop', 5, 'product-list.php', 1),
+(4, 'Phụ Kiện', 6, 'contact.php', 1),
+(5, 'Ưu đãi', 6, 'contact.php', 1),
+(6, 'Tin công nghệ', 8, 'contact.php', 1),
+(7, 'Liên Hệ', 9, 'contact.php', 1);
 
 -- --------------------------------------------------------
 
@@ -131,6 +146,14 @@ CREATE TABLE `momo` (
   `trans_id` varchar(20) NOT NULL,
   `response_time` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `momo`
+--
+
+INSERT INTO `momo` (`id_momo`, `partner_code`, `order_info`, `amount`, `order_type`, `trans_id`, `response_time`) VALUES
+('', '', '', '', '', '', ''),
+('DH-9B797E95', 'MOMOBKUN20180529', 'Thanh toán qua ATM MoMo', '7780000', 'momo_wallet', '', '1722935774650');
 
 -- --------------------------------------------------------
 
@@ -222,10 +245,10 @@ INSERT INTO `sanpham` (`MaSP`, `TenSP`, `Gia`, `GiaHienTai`, `HinhAnh`, `HinhAnh
 (15, 'IPhone 15 Plus', 25990000.00, 25490000.00, 'iphone (5).jpg', '', '', 'Màn hình	6.1 inch OLED, Camera sau 48.0 MP + 12.0 MP, RAM	6 GB, CPU Apple A16 Bionic', 30, 1, '128 GB', 'Black'),
 (16, 'IPhone 15', 22590000.00, 22490000.00, 'iphone (5).jpg', '', '', 'Màn hình	6.1 inch OLED, Camera sau 48.0 MP + 12.0 MP, RAM	6 GB, CPU Apple A16 Bionic', 30, 1, '128 GB', 'Black'),
 (17, 'SamSung Galaxy S22', 21990000.00, 11990000.00, 'samsung (6).jpg', '', '', 'Màn hình	6.1 inch  Dynamic AMOLED 2X, Camera sau 50.0 MP + 12.0 MP + 10.0 MP, RAM 8 GB, CPU	Snapdragon 8 Gen 1', 23, 2, '128 GB', 'Trắng'),
-(18, 'Xiaomi Redmi Note 12 4GB', 4890000.00, 3890000.00, 'xiaomi (4).jpg', '', '', 'Màn hình	6.55 inch AMOLED, Camera sau  50.0 MP + 8.0 MP + 2.0 MP, RAM  8 GB, CPU Snapdragon 7 Gen 1', 20, 4, '128 GB', 'Đen'),
-(19, 'Oppo Reno8 T 4G', 8490000.00, 7190000.00, 'oppo.jpg', '', '', 'Màn hình	6.4 inch AMOLED, Camera sau	100.0 MP + 2.0 MP + 2.0 MP, RAM 8 GB, CPU	MediaTek Helio G99', 16, 3, '256 GB', 'Đen'),
+(18, 'Xiaomi Redmi Note 12 4GB', 4890000.00, 3890000.00, 'xiaomi (4).jpg', '', '', 'Màn hình	6.55 inch AMOLED, Camera sau  50.0 MP + 8.0 MP + 2.0 MP, RAM  8 GB, CPU Snapdragon 7 Gen 1', 17, 4, '128 GB', 'Đen'),
+(19, 'Oppo Reno8 T 4G', 8490000.00, 7190000.00, 'oppo.jpg', '', '', 'Màn hình	6.4 inch AMOLED, Camera sau	100.0 MP + 2.0 MP + 2.0 MP, RAM 8 GB, CPU	MediaTek Helio G99', 14, 3, '256 GB', 'Đen'),
 (20, 'Samsung Galaxy Z Flip4 5G', 11990000.00, 12990000.00, 'samsung (2).jpg', '', '', 'Màn hình	6.7 inch 19 inch, Camera sau 12.0 MP + 12.0 MP, RAM 8 GB, CPU Snapdragon 8+ Gen 1', 17, 2, '128 GB', 'Xám'),
-(21, 'Xiaomi 13 Lite 8GB', 10690000.00, 7690000.00, 'xiaomi (2).jpg', '', '', 'Màn hình	6.55 inch AMOLED, Camera sau  50.0 MP + 8.0 MP + 2.0 MP, RAM  8 GB, CPU Snapdragon 7 Gen 1', 38, 4, '128 GB', 'Đen');
+(21, 'Xiaomi 13 Lite 8GB', 10690000.00, 7690000.00, 'xiaomi (2).jpg', '', '', 'Màn hình	6.55 inch AMOLED, Camera sau  50.0 MP + 8.0 MP + 2.0 MP, RAM  8 GB, CPU Snapdragon 7 Gen 1', 35, 4, '128 GB', 'Đen');
 
 -- --------------------------------------------------------
 
@@ -293,6 +316,13 @@ CREATE TABLE `vnpay` (
   `vnp_tmncode` varchar(50) NOT NULL,
   `vnp_transactionno` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `vnpay`
+--
+
+INSERT INTO `vnpay` (`id_vnp`, `vnp_amount`, `vnp_bankcode`, `vnp_banktranno`, `vnp_cardtype`, `vnp_orderinfo`, `vnp_paydate`, `vnp_tmncode`, `vnp_transactionno`) VALUES
+('DH-4EFE6251', '1438000000', 'NCB', 'VNP14546537', 'ATM', 'Thanh toan hoa don', '20240806155546', 'MAXLEO7T', '14546537');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -383,13 +413,13 @@ ALTER TABLE `vnpay`
 -- AUTO_INCREMENT cho bảng `danhgia`
 --
 ALTER TABLE `danhgia`
-  MODIFY `MaDG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+  MODIFY `MaDG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
-  MODIFY `MaHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `MaHD` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT cho bảng `menu`

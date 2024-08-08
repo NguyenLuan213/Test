@@ -85,10 +85,10 @@ require("../admin/config/config.php");
                                                 document.getElementById('myForm').submit();
                                             });
 
-                                            document.getElementById('addToCart').addEventListener('click', function() {
-                                                document.getElementById('myForm').action = 'addProductToCart.php';
-                                                document.getElementById('myForm').submit();
-                                            });
+                                            // document.getElementById('addToCart').addEventListener('click', function() {
+                                            //     document.getElementById('myForm').action = 'addProductToCart.php';
+                                            //     document.getElementById('myForm').submit();
+                                            // });
                                         </script>
 
 
@@ -349,19 +349,20 @@ require("../admin/config/config.php");
                                                 Mua ngay
                                             </button></a>
                         
-                                            <a class="addtocart" name="addtocart" data-idsp="' . $row['MaSP'] . '" href="addProductToCart.php?idsp=' . $row['MaSP'] . ' " >
-                                            <button class="button">
-                                                Giỏ hàng
-                                                <svg class="cartIcon" viewBox="0 0 576 512">
-                                                    <path
-                                                        d="M0 24C0 10.7 10.7 0 24 0H69.5c22 
-                                                                    0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 
-                                                                    28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 
-                                                                    24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 
-                                                                    48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z">
-                                                    </path>
-                                                </svg>
-                                            </button></a>
+                                            <a class="product" name="addToCarts" data-idsp="' . $row['MaSP'] . '">
+    <input type="hidden" class="product_id" value="' . $row['MaSP'] . '">
+    <button class="button addToCartBtn">
+        Giỏ hàng
+        <svg class="cartIcon" viewBox="0 0 576 512">
+            <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 
+                    0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 
+                    28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 
+                    24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 
+                    48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z">
+            </path>
+        </svg>
+    </button>
+</a>
                                     </div>
                                 </div>
                             </div>
@@ -374,24 +375,15 @@ require("../admin/config/config.php");
         </div>
         <!-- /.product-single -->
     </div>
+
     <!-- footer -->
     <?php include 'footer.php' ?>
     <!-- /.footer-social links -->
     </div>
     </div>
     </div>
-    <!-- /.footer -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="js/jquery.min.js" type="text/javascript"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="js/menumaker.js" type="text/javascript"></script>
-    <script type="text/javascript" src="js/jquery.sticky.js"></script>
-    <script type="text/javascript" src="js/sticky-header.js"></script>
-    <script type="text/javascript" src="js/scrolling-nav.js"></script>
-    <script type="text/javascript" src="js/jquery.easing.min.js"></script>
-    <script type="text/javascript" src="js/jquery.rateyo.min.js"></script>
-    <script src="js/jquery.desoslide.js "></script>
+
+
     <script type="text/javascript">
         $('#slideshow').desoSlide({
             thumbs: $('ul.slideshow_thumbs li > a'),
@@ -448,6 +440,36 @@ require("../admin/config/config.php");
             });
         });
     </script>
+
+
+    <script>
+        //ajax
+        $("#addToCart").click(function() {
+            $.ajax({
+                url: 'addProductToCart.php',
+                type: 'get',
+                data: {
+                    idsp: $('#idsp').val(),
+                    quantity: $('#quantity').val(),
+                },
+                success: function(data) {
+                    $('#successMessage').show();
+
+                    // Ẩn thông báo sau 2 giây
+                    setTimeout(function() {
+                        $('#successMessage').hide();
+                    }, 2000);
+                    console.log('Thêm giỏ thành công');
+                },
+                error: function() {
+                    alert('Error');
+                }
+            });
+        });
+    </script>
+
+
+
     <script>
         // Lấy thẻ input bằng id
         var input = document.getElementById("quantity");

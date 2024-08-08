@@ -4,6 +4,7 @@ $menuname = $_POST['menuName'];
 $menulink = $_POST['menuLink'];
 $menuorder = $_POST['menuOrder'];
 
+
 if (isset($_POST['addMenu'])) {
     $sql_sua = "UPDATE menu SET ThuTu = ThuTu + 1 WHERE ThuTu >= " . $menuorder;
     $mysqli->query($sql_sua);

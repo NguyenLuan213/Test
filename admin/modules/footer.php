@@ -8,7 +8,7 @@
             </div>
             <div class="col-6 text-end">
                 <ul class="list-inline">
-                    
+
                 </ul>
             </div>
         </div>
@@ -41,6 +41,11 @@
             output.classList.remove('d-none'); // Xóa class 'd-none'
         }
         reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+<script>
+    function goBack() {
+        window.history.back();
     }
 </script>
 </body>

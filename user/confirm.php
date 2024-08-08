@@ -24,7 +24,7 @@ if ($vnp_ResponseCode == '00' || $resultCode == '0') {
     $cart_payment = $order_info['cart_payment'];
 
     // Cập nhật dữ liệu vào hóa đơn
-    $sql_update_hoadon = "INSERT INTO hoadon (CodeDH, NgayLap, MaND, DiaChiHD, TenNguoiNhan, SDT, ThanhToan) VALUES ('$codedh', NOW(), '$MaND', '$DiaChiHD', '$TenNguoiNhan', '$SDT', 'vnpay')";
+    $sql_update_hoadon = "INSERT INTO hoadon (CodeDH, NgayLap, MaND, DiaChiHD, TenNguoiNhan, SDT, ThanhToan) VALUES ('$codedh', NOW(), '$MaND', '$DiaChiHD', '$TenNguoiNhan', '$SDT', '$cart_payment')";
     $mysqli->query($sql_update_hoadon);
 
     if (isset($order_info['AllPayOrders'])) {
@@ -75,16 +75,16 @@ if ($vnp_ResponseCode == '00' || $resultCode == '0') {
 
     if ($resultCode == '0') {
 
-        $orderId = isset($_POST['orderId']) ? $_POST['orderId'] : '';
-        $partnerCode = isset($_POST['partnerCode']) ? $_POST['partnerCode'] : '';
-        $orderInfo = isset($_POST['orderInfo']) ? $_POST['orderInfo'] : '';
-        $amount = isset($_POST['amount']) ? $_POST['amount'] : '';
-        $orderType = isset($_POST['orderType']) ? $_POST['orderType'] : '';
-        $transId = isset($_POST['transId']) ? $_POST['transId'] : '';
-        $responseTime = isset($_POST['responseTime']) ? $_POST['responseTime'] : '';
+        $orderId = isset($_GET['orderId']) ? $_GET['orderId'] : '';
+        $partnerCode = isset($_GET['partnerCode']) ? $_GET['partnerCode'] : '';
+        $orderInfo = isset($_GET['orderInfo']) ? $_GET['orderInfo'] : '';
+        $amount = isset($_GET['amount']) ? $_GET['amount'] : '';
+        $orderType = isset($_GET['orderType']) ? $_GET['orderType'] : '';
+        $transId = isset($_GET['transId']) ? $_GET['transId'] : '';
+        $responseTime = isset($_GET['responseTime']) ? $_GET['responseTime'] : '';
 
         $sql_update_momo = "INSERT INTO momo (id_momo, partner_code, order_info, amount, order_type, trans_id, response_time) 
-        VALUES ('$orderId', '$partnerCode', '$orderInfo', '$amount', '$orderType', '$transId', '$vnp_PayDate', '$responseTime')";
+        VALUES ('$orderId', '$partnerCode', '$orderInfo', '$amount', '$orderType', '$transId', '$responseTime')";
         $mysqli->query($sql_update_momo);
     }
 } else {

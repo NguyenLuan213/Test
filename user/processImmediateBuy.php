@@ -12,7 +12,7 @@ session_start();
 <?php include 'header.php'; ?>
 
 
-<body>
+<body onload="thongbaopopup()">
     <!-- top-header-->
     <?php include "navbar.php"; ?>
 
@@ -223,16 +223,19 @@ if ($message) {
     unset($_SESSION['message']);
 }
 if ($message) : ?>
-    <div class="overlay">
-        <div class="message-box">
-            <p><?php echo htmlspecialchars($message); ?></p>
-            <button class="close-btn" onclick="closeMessageBox()">Đóng</button>
+    <div class="tbpopup" id="tbpopup-1">
+        <div class="tboverlay"></div>
+        <div class="tbcontent">
+            <div class="tbclose-btn" onclick="thongbaopopup()">&times;</div>
+            <div>
+                <h2 style="color: #fb4961">Thông báo</h2>
+            </div>
+            <p><?php echo $message ?></p>
         </div>
     </div>
     <script>
-        function closeMessageBox() {
-            document.querySelector('.overlay').style.display = 'none';
-
+        function thongbaopopup() {
+            document.getElementById("tbpopup-1").classList.toggle("active");
         }
     </script>
 <?php endif; ?>

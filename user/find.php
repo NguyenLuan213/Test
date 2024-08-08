@@ -44,16 +44,17 @@ require("../admin/config/config.php");
                                 Mua ngay
                             </button></a>
         
-                            <a class="addtocart" name="addtocart" data-idsp="' . $row['MaSP'] . '" href="addProductToCart.php?idsp=' . $row['MaSP'] . ' " >
-                            <button class="button">
+                            <a class="product" name="product" data-idsp="' . $row['MaSP'] . '"  >
+                            <input type="hidden" class="product_id" value="' . $row['MaSP'] . '">
+                            <button class="button addToCartBtn">
                                 Giỏ hàng
                                 <svg class="cartIcon" viewBox="0 0 576 512">
                                     <path
-                                        d="M0 24C0 10.7 10.7 0 24 0H69.5c22 
-                                                    0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 
-                                                    28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 
-                                                    24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 
-                                                    48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z">
+                                        d="M0 23C0 10.7 10.7 0 23 0H69.5c22 
+                                                    0 31.5 12.8 50.6 32h311c26.3 0 35.5 25 38.6 50.3l-31 152.3c-8.5 31.3-37 53.3-69.5 53.3H170.7l5.3 
+                                                    28.5c2.2 11.3 12.1 19.5 23.6 19.5H388c13.3 0 23 10.7 23 
+                                                    23s-10.7 23-23 23H199.7c-33.6 0-63.3-23.6-70.7-58.5L77.3 53.5c-.7-3.8-3-6.5-7.9-6.5H23C10.7 
+                                                    38 0 37.3 0 23zM128 363a38 38 0 1 1 96 0 38 38 0 1 1 -96 0zm336-38a38 38 0 1 1 0 96 38 38 0 1 1 0-96z">
                                     </path>
                                 </svg>
                             </button></a>
@@ -62,7 +63,6 @@ require("../admin/config/config.php");
                     </div>
                 </div>';
                         }
-
                     } else {
                         $kqqq = "Thông tin không đúng vui lòng kiểm tra lại";
                     }
@@ -74,7 +74,7 @@ require("../admin/config/config.php");
         </div>
     </div>
     <?php include "footer.php"
-        ?>
+    ?>
 
 </body>
 

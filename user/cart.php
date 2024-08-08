@@ -95,7 +95,7 @@ session_start();
                                         <tbody>
                                             <tr>
                                                 <th>
-                                                    <span>Giá (' . count(array_column($_SESSION['giohang'], 'MaSP')) . ' sản phẩm)</span>
+                                                    <span>Giá (' .  array_sum(array_column($_SESSION['giohang'], 'soluongsp')) . ' sản phẩm)</span>
                                                 </th>
                                                 <td class="text-nowrap">';
                     $tong_gia_tri = 0;

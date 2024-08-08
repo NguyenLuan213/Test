@@ -1,3 +1,15 @@
+<?php
+$sql_danhsach = "SELECT * FROM menu ORDER BY ThuTu ASC";
+$result = mysqli_query($mysqli, $sql_danhsach);
+$row_count = $result->num_rows;
+if ($row_count >= 7) {
+	// Quay lại trang trước
+	echo '<script type="text/javascript">
+window.history.back();
+</script>';
+	exit();
+}
+?>
 <main class="content">
 	<div class="container-fluid p-0">
 		<div class="row">

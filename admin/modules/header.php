@@ -17,6 +17,6 @@ if (isset($_GET['act']) == "dangxuat") {
   <title>Admin MobiStore</title>
   <link rel="stylesheet" href="./css/style.css">
   <link href="./css/app.css" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>

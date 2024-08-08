@@ -93,6 +93,42 @@
 <script type="text/javascript" src="js/owl.carousel.min.js"></script>
 <script type="text/javascript" src="js/multiple-carousel.js"></script>
 <script src="https://kit.fontawesome.com/3431c04d0c.js" crossorigin="anonymous"></script>
+<!-- /.footer -->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
+<script type="text/javascript" src="js/scrolling-nav.js"></script>
+<script type="text/javascript" src="js/jquery.easing.min.js"></script>
+<script type="text/javascript" src="js/jquery.rateyo.min.js"></script>
+<script src="js/jquery.desoslide.js "></script>
 <script src="js/main.js"></script>
+
+<div id="successMessage">Thêm giỏ thành công</div>
+<script>
+    $(document).ready(function() {
+        $(".addToCartBtn").click(function() {
+            var product_id = $(this).closest('.product').find('.product_id').val();
+
+            console.log('ID sản phẩm mới: ' + product_id);
+            $.ajax({
+                url: 'addProductToCart.php',
+                type: 'get',
+                data: {
+                    idsp: product_id,
+                },
+                success: function(data) {
+                    $('#successMessage').show();
+                    setTimeout(function() {
+                        $('#successMessage').hide();
+                    }, 2000);
+                    console.log('Thêm giỏ thành công');
+                },
+                error: function() {
+                    alert('Error');
+                    console.log('Lỗi');
+                }
+            });
+        });
+    });
+</script>
 
 </html>

@@ -24,6 +24,19 @@ if (isset($_GET['cong'])) {
     exit();
 }
 
+//hủy đơn hàng
+if (isset($_GET['huydon']) && $_GET['codedh']) {
+    $codedh = $_GET['codedh'];
+    $huydon = $_GET['huydon'];
+
+    // if ($huydon == 1) {
+    //     $huydon = 0;
+    // } else {
+    //     $huydon = 1;
+    // }
+    mysqli_query($mysqli, "UPDATE hoadon SET DaHuy = $huydon WHERE CodeDH = '" . $codedh . "'");
+}
+
 //trừ 
 if (isset($_GET['tru'])) {
     $id = $_GET['tru'];

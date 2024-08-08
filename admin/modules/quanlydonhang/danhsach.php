@@ -18,10 +18,9 @@ $result = mysqli_query($mysqli, $sql_danhsach);
                             <tr>
                                 <th>STT</th>
                                 <th>Mã Đơn Hàng</th>
-                                <th>Tên Khách Hàng</th>
-                                <th>Số Điện Thoại </th>
-                                <th>Địa Chỉ</th>
-                                <th>Tình Trạng</th>
+                                <th>Địa chỉ nhận hàng</th>
+                                <th> Phương thức thanh toán</th>
+                                <th>Trạng thái</th>
                                 <th>Xem Chi Tiết</th>
                             </tr>
                         </thead>
@@ -33,16 +32,37 @@ $result = mysqli_query($mysqli, $sql_danhsach);
                                 <tr>
                                     <td><?php echo $i++; ?></td>
                                     <td><?php echo $row['CodeDH']; ?></td>
-                                    <td><?php echo $row['TenNguoiNhan']; ?></td>
-                                    <td><?php echo $row['SDT']; ?></td>
-                                    <td style="max-width: 200px; word-wrap: break-word;"><?php echo $row['DiaChiHD']; ?></td>
+                                    <td style="max-width: 270px; word-wrap: break-word;">
+                                        <?php
+                                        echo $row['TenNguoiNhan'] . '<br>';
+                                        echo $row['SDT'] . '<br>';
+                                        echo $row['DiaChiHD'];
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php if ($row['ThanhToan'] == 'vnpay') {
+                                            echo 'Thanh toán bằng VNPay';
+                                        } else  if ($row['ThanhToan'] == 'tienmat') {
+                                            echo 'Thanh toán khi nhận hàng';
+                                        } else  if ($row['ThanhToan'] == 'momo') {
+                                            echo 'Thanh toán bằng Momo';
+                                        } ?>
+
+
+                                    </td>
                                     <td><?php
-                                        if ($row['TrangThai'] == 1) {
-                                            echo '<a class="text-decoration-none badge bg-success" href="modules/quanlydonhang/xuly.php?tt=1&code=' . $row['CodeDH'] . '">Đã xem</a>';
+                                        if ($row['DaHuy'] == 0) {
+                                            if ($row['TrangThai'] == 1) {
+
+                                                echo '<a class="text-decoration-none badge bg-success" href="modules/quanlydonhang/xuly.php?tt=1&code=' . $row['CodeDH'] . '">Đang giao</a>';
+                                            } else {
+                                                echo '<a class="text-decoration-none badge bg-warning" href="modules/quanlydonhang/xuly.php?tt=0&code=' . $row['CodeDH'] . '">Đơn Hàng mới</a>';
+                                            }
                                         } else {
-                                            echo '<a class="text-decoration-none badge bg-warning" href="modules/quanlydonhang/xuly.php?tt=0&code=' . $row['CodeDH'] . '">Đơn Hàng mới</a>';
+                                            echo '<a class="text-decoration-none badge bg-secondary" >Đã hủy</a>';
                                         }
                                         ?></td>
+
                                     <td><a class="btn btn-sm btn-primary" href="?action=donhang&query=xemdonhang&code=<?php echo $row['CodeDH']; ?>"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-middle me-2">
                                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                 <circle cx="12" cy="12" r="3"></circle>

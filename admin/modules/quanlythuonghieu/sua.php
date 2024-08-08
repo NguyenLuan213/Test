@@ -5,7 +5,16 @@ $row = mysqli_fetch_array($result);
 ?>
 <main class="content">
     <div class="container-fluid p-0">
-        <h1 class="h3 mb-3">Sửa Menu sản phẩm</h1>
+        <div class="row">
+            <div class="col-9">
+                <h1 class="h3 mb-3">Sửa thương hiệu sản phẩm</h1>
+            </div>
+            <div class="col-3 text-end">
+                <button type="button" class="btn btn-primary btn-lg" onclick="goBack()">
+                    <i class="bi bi-arrow-left-circle"></i> Quay lại
+                </button>
+            </div>
+        </div>
         <div class="row">
             <div class="col-12">
                 <div class="card p-4">

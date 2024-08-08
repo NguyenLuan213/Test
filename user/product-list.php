@@ -42,11 +42,11 @@
 
                 $result = mysqli_query($mysqli, $sql);
                 if ($result->num_rows > 0) {
-                    ?>
+            ?>
 
-            <div class="row">
-                <!-- product -->
-                <?php
+                    <div class="row">
+                        <!-- product -->
+                        <?php
                         //Hiển thị
                         while ($row = mysqli_fetch_array($result)) {
 
@@ -76,9 +76,9 @@
                             </button></a>
                             
 
-                            <a class="addtocart" name="addtocart" data-idsp="' . $row['MaSP'] . '" href="addProductToCart.php?idsp=' . $row['MaSP'] . ' " >
-                            
-                            <button class="button">
+                            <a class="product" name="product" data-idsp="' . $row['MaSP'] . '"  >
+                            <input type="hidden" class="product_id" value="' . $row['MaSP'] . '">
+                            <button class="button addToCartBtn">
                                 Giỏ hàng
                                 <svg class="cartIcon" viewBox="0 0 576 512">
                                     <path
@@ -100,15 +100,15 @@
                 </div>
             </div>';
                         } ?>
-                <!-- /.product -->
-            </div>
+                        <!-- /.product -->
+                    </div>
 
-            <div class="row">
-                <!-- pagination start -->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="st-pagination">
-                        <ul class="pagination">
-                            <?php
+                    <div class="row">
+                        <!-- pagination start -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="st-pagination">
+                                <ul class="pagination">
+                                    <?php
                                     $idth = isset($_GET['idth']) ? $_GET['idth'] : '';
                                     $mamenu = $_GET['mamenu'];
                                     if ($current_page > 1 && $total_pages > 1) {
@@ -125,11 +125,11 @@
                                         echo '<li> <a href="product-list.php?mamenu=' . $mamenu . '&idth=' . $idth . '&page=' . ($current_page + 1) . '" aria-label="Next"><span aria-hidden="true">Sau</span></a>';
                                     }
                                     ?>
-                        </ul>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- pagination close -->
                     </div>
-                </div>
-                <!-- pagination close -->
-            </div>
             <?php }
             } else {
                 echo '<h2 class="mbs">Trang này hiện đang trống . Vui lòng liên hệ lại admin</h2>';
@@ -142,56 +142,33 @@
     <?php include 'footer.php' ?>
 
 
-    <script>
-    $(".addtocart").click(function() {
-
-        var idsp = $(this).data('idsp');
-        console.log("idsp being sent:", idsp);
-
-        $.ajax({
-                method: "post",
-                url: 'addProductToCart.php',
-                data: {
-                    idsp: idsp,
-
-                }
-            })
-            .done(function(data) {
-                console.log(idsp);
-                console.log('Thêm giỏ hàng thành công');
-            })
-            .fail(function(data) {
-                console.log('Có lỗi xảy ra, vui lòng thử lại');
-            });
-    });
-    </script>
 
 
     <script type="text/javascript">
-    (function($) {
-        $(document).ready(function() {
-            $('#cssmenu ul ul li:odd').addClass('odd');
-            $('#cssmenu ul ul li:even').addClass('even');
-            $('#cssmenu > ul > li > a').click(function() {
-                $('#cssmenu li').removeClass('active');
-                $(this).closest('li').addClass('active');
-                var checkElement = $(this).next();
-                if ((checkElement.is('ul')) && (checkElement.is(':visible'))) {
-                    $(this).closest('li').removeClass('active');
-                    checkElement.slideUp('normal');
-                }
-                if ((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
-                    $('#cssmenu ul ul:visible').slideUp('normal');
-                    checkElement.slideDown('normal');
-                }
-                if ($(this).closest('li').find('ul').children().length == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+        (function($) {
+            $(document).ready(function() {
+                $('#cssmenu ul ul li:odd').addClass('odd');
+                $('#cssmenu ul ul li:even').addClass('even');
+                $('#cssmenu > ul > li > a').click(function() {
+                    $('#cssmenu li').removeClass('active');
+                    $(this).closest('li').addClass('active');
+                    var checkElement = $(this).next();
+                    if ((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+                        $(this).closest('li').removeClass('active');
+                        checkElement.slideUp('normal');
+                    }
+                    if ((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+                        $('#cssmenu ul ul:visible').slideUp('normal');
+                        checkElement.slideDown('normal');
+                    }
+                    if ($(this).closest('li').find('ul').children().length == 0) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
             });
-        });
-    })(jQuery);
+        })(jQuery);
     </script>
 
 
