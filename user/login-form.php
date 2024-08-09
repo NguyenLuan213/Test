@@ -14,7 +14,7 @@ if (isset($_POST['login'])) {
     $result = $mysqli->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $_SESSION['txtuser'] = $user;
+            // $_SESSION['txtuser'] = $user;
             $_SESSION['Email'] = $row["Email"];
             $_SESSION['TenND'] = $row["TenND"];
             $_SESSION['SDT'] = $row["SDT"];

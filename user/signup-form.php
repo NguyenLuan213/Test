@@ -1,21 +1,25 @@
-<?php 
+<?php
+ob_start();
+session_start();
 $name  = "";
 $phone = "";
 $email = "";
-$address = "";   
+$address = "";
 $pass = "";
 $repass = "";
-$permission_code= '2';
-$kqdk="";
-if(isset($_POST['register'])) {
+$permission_code = '2';
+$kqdk = "";
+if (isset($_POST['register'])) {
     require('../admin/config/config.php');
-    $name  = $_POST['name'];
-    $phone = $_POST['phone'];
-    $email = $_POST['email'];
-    $address = $_POST['address'];   
+    $_SESSION['TenND'] = $name  = $_POST['name'];
+    $_SESSION['SDT'] = $phone = $_POST['phone'];
+    $_SESSION['Email']  = $email = $_POST['email'];
+    $_SESSION['DiaChi'] = $address = $_POST['address'];
     $pass = md5($_POST['password']);
     $repass = md5($_POST['repeat-pass']);
-    $permission_code= '2';
+    $permission_code = '2';
+
+
 
     // Kiểm tra xem số điện thoại đã tồn tại hay chưa
     $checkPhoneQuery = "SELECT * FROM nguoidung WHERE SDT = '$phone'";
@@ -33,13 +37,19 @@ if(isset($_POST['register'])) {
         $kqdk = "Email đã được đăng ký. Vui lòng chọn một địa chỉ email khác.";
     } else {
         // Tiếp tục thêm dữ liệu mới nếu số điện thoại và email đều chưa tồn tại
-        if($repass != $pass) {
+        if ($repass != $pass) {
             $kqdk = "Mật khẩu nhập lại không chính xác";
         } else {
             $sql = "INSERT INTO nguoidung (TenND, MatKhau, Email, SDT, DiaChi, MaQuyen) 
                     VALUES ('$name', '$pass', '$email', '$phone', '$address', '$permission_code')";
 
             if (mysqli_query($mysqli, $sql)) {
+
+                $_SESSION['MaND'] = mysqli_insert_id($mysqli);
+                $_SESSION['TenND']  = $_POST['name'];
+                $_SESSION['SDT'] = $_POST['phone'];
+                $_SESSION['Email']  = $_POST['email'];
+                $_SESSION['DiaChi']  = $_POST['address'];
                 $name = "";
                 $phone = "";
                 $email = "";
@@ -48,6 +58,8 @@ if(isset($_POST['register'])) {
                 $repass = "";
                 $permission_code = "2";
                 $kqdk = "Đăng ký thành công";
+                header('Location:index.php');
+                exit();
             } else {
                 $kqdk = "Đăng ký không thành công. Vui lòng kiểm tra lại thông tin.";
             }
@@ -62,7 +74,7 @@ if(isset($_POST['register'])) {
 
 <body>
     <!-- top-header-->
-      <?php include "navbar.php"?>
+    <?php include "navbar.php" ?>
     <!-- sign-up form -->
     <div class="content">
         <div class="container">
@@ -76,49 +88,43 @@ if(isset($_POST['register'])) {
                                     <h3 class="mb10">Tạo tài khoản</h3>
                                     <p>Vui lòng điền tất cả các thông tin vào mẫu Đăng ký. </p>
                                 </div>
-                                <form method="POST" action="" >
+                                <form method="POST" action="">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label sr-only" for="name">
 
                                             </label>
-                                            <input id="name" name="name" type="text" class="form-control"
-                                                placeholder="Nhập tên của bạn" required>
+                                            <input id="name" name="name" type="text" class="form-control" placeholder="Nhập tên của bạn" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label sr-only" for="phone"></label>
-                                            <input id="phone" name="phone" type="text" class="form-control"
-                                                placeholder=" Nhập số điện thoại" required>
+                                            <input id="phone" name="phone" type="text" class="form-control" placeholder=" Nhập số điện thoại" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label sr-only" for="email"></label>
-                                            <input id="email" name="email" type="text" class="form-control"
-                                                placeholder="Nhập email" required>
+                                            <input id="email" name="email" type="text" class="form-control" placeholder="Nhập email" required>
                                         </div>
-                                    </div>                                   
+                                    </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label sr-only" for="address"></label>
-                                            <input id="address" name="address" type="text" class="form-control"
-                                                placeholder="Nhập địa chỉ" required>
+                                            <input id="address" name="address" type="text" class="form-control" placeholder="Nhập địa chỉ" required autocomplete="on">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label  sr-only" for="password"></label>
-                                            <input id="password" name="password" type="password" class="form-control"
-                                                placeholder="Nhập mật khẩu" required>
+                                            <input id="password" name="password" type="password" class="form-control" placeholder="Nhập mật khẩu" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <div class="form-group">
                                             <label class="control-label  sr-only" for="repeat-pass"></label>
-                                            <input id="repeat-pass" name="repeat-pass" type="password" class="form-control"
-                                                placeholder="Nhập lại mật khẩu" required>
+                                            <input id="repeat-pass" name="repeat-pass" type="password" class="form-control" placeholder="Nhập lại mật khẩu" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
@@ -142,7 +148,7 @@ if(isset($_POST['register'])) {
                                 </div>
                                 <div class="feature-content">
                                     <h4>Giá thành hợp lý </h4>
-                                      </div>
+                                </div>
                             </div>
                             <div class="feature-left">
                                 <div class="feature-icon">
@@ -150,7 +156,7 @@ if(isset($_POST['register'])) {
                                 </div>
                                 <div class="feature-content">
                                     <h4>Thanh toán nhanh chóng </h4>
-                                    </div>
+                                </div>
                             </div>
                             <div class="feature-left">
                                 <div class="feature-icon">
@@ -158,7 +164,7 @@ if(isset($_POST['register'])) {
                                 </div>
                                 <div class="feature-content">
                                     <h4>Ưu đãi độc quyền </h4>
-                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -228,13 +234,10 @@ if(isset($_POST['register'])) {
                         <div class="ft-social">
                             <span><a href="#" class="btn-social btn-facebook"><i class="fa fa-facebook"></i></a></span>
                             <span><a href="#" class="btn-social btn-twitter"><i class="fa fa-twitter"></i></a></span>
-                            <span><a href="#" class="btn-social btn-googleplus"><i
-                                        class="fa fa-google-plus"></i></a></span>
+                            <span><a href="#" class="btn-social btn-googleplus"><i class="fa fa-google-plus"></i></a></span>
                             <span><a href="#" class=" btn-social btn-linkedin"><i class="fa fa-linkedin"></i></a></span>
-                            <span><a href="#" class=" btn-social btn-pinterest"><i
-                                        class="fa fa-pinterest-p"></i></a></span>
-                            <span><a href="#" class=" btn-social btn-instagram"><i
-                                        class="fa fa-instagram"></i></a></span>
+                            <span><a href="#" class=" btn-social btn-pinterest"><i class="fa fa-pinterest-p"></i></a></span>
+                            <span><a href="#" class=" btn-social btn-instagram"><i class="fa fa-instagram"></i></a></span>
                         </div>
                     </div>
                 </div>

@@ -26,45 +26,21 @@ $DiaChiHD = isset($_POST['DiaChiHD']) ? $_POST['DiaChiHD'] : '';
 //xử lí thanh toán
 if ($cart_payment == 'tienmat') {
 
+    $_SESSION['order_info'] = array(
+        'codedh' => $codedh,
+        'MaND' => $MaND,
+        'DiaChiHD' => $DiaChiHD,
+        'TenNguoiNhan' => $TenNguoiNhan,
+        'SDT' => $SDT,
+        'cart_payment' => $cart_payment,
+        'soluong' => isset($_POST['quantity']) ? $_POST['quantity'] : 1,
+        'masp' => isset($_GET['idsp']) ? $_GET['idsp'] : $_POST['idsp'],
+        'AllPayOrders' => isset($_POST['AllPayOrders']) ? $_POST['AllPayOrders'] : null
+    );
 
-
-
-    if (isset($_POST['order'])) {
-        $soluong = isset($_POST['quantity']) ? $_POST['quantity'] : 1;
-        $masp = isset($_GET['idsp']) ? $_GET['idsp'] : $_POST['idsp'];
-        $sql_update_hoadon = "INSERT INTO hoadon (CodeDH, NgayLap, MaND, DiaChiHD, TenNguoiNhan, SDT, ThanhToan) VALUES ('$codedh', NOW(), '$MaND', '$DiaChiHD' , '$TenNguoiNhan', '$SDT', '$cart_payment')";
-        $mysqli->query($sql_update_hoadon);
-        $sql_update_cthoadon = "INSERT INTO chitiethoadon (MaSP,CodeDH,SoLuongMua) VALUES ($masp,'$codedh', $soluong)";
-        $mysqli->query($sql_update_cthoadon);
-        $sql_update_soluongsp = "UPDATE sanpham SET SoLuong = SoLuong - $soluong WHERE MaSP = '" . $masp . "' ";
-        $mysqli->query($sql_update_soluongsp);
-        header('Location: confirm.php');
-    }
-    if (isset($_POST['AllPayOrders'])) {
-
-        $sql_update_hoadon = "INSERT INTO hoadon (CodeDH, NgayLap, MaND, DiaChiHD, TenNguoiNhan, SDT, ThanhToan) VALUES ('$codedh', NOW(), '$MaND','$DiaChiHD', '$TenNguoiNhan', '$SDT', '$cart_payment' )";
-        $mysqli->query($sql_update_hoadon);
-        foreach ($_SESSION['giohang'] as $key => $value) {
-            $idsp = $value['MaSP'];
-            $tensp = $value['TenSP'];
-            $giahientai = $value['GiaHienTai'];
-            $soluongsp = $value['soluongsp'];
-
-            $sql_update_cthoadon = "INSERT INTO chitiethoadon (MaSP,CodeDH,SoLuongMua) VALUES ($idsp,'$codedh', $soluongsp)";
-            $mysqli->query($sql_update_cthoadon);
-            $sql_update_soluongsp = "UPDATE sanpham SET SoLuong = SoLuong - $soluongsp WHERE MaSP = '" . $idsp . "' ";
-            $mysqli->query($sql_update_soluongsp);
-        }
-        unset($_SESSION["giohang"]);
-        header('Location: confirm.php');
-    }
+    header('Location: confirm.php?cash_status=0', true, 302);
+    exit();
 } elseif ($cart_payment == 'vnpay') {
-
-
-
-
-
-
     $cart_payment == 'vnpay';
     $vnp_TxnRef = $codedh; //Mã giao dịch thanh toán tham chiếu của merchant
     $vnp_Amount = $_POST['vnp_Amount']; // Số tiền thanh toán

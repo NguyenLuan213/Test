@@ -1,5 +1,6 @@
 <?php
 require_once("../admin/config/config.php");
+include "sendmail.php";
 ob_start();
 session_start(); ?>
 <?php if (!isset($_SESSION['MaND'])) {
@@ -12,8 +13,9 @@ session_start(); ?>
 //xử lí thanh toán
 $vnp_ResponseCode = isset($_GET['vnp_ResponseCode']) ? $_GET['vnp_ResponseCode'] : '';
 $resultCode = isset($_GET['resultCode']) ? $_GET['resultCode'] : '';
+$cash_status = isset($_GET['cash_status']) ? $_GET['cash_status'] : '';
 
-if ($vnp_ResponseCode == '00' || $resultCode == '0') {
+if ($vnp_ResponseCode == '00' || $resultCode == '0' || $cash_status == '0') {
     // Thanh toán thành công
     $order_info = $_SESSION['order_info'];
     $codedh = $order_info['codedh'];
@@ -87,6 +89,66 @@ if ($vnp_ResponseCode == '00' || $resultCode == '0') {
         VALUES ('$orderId', '$partnerCode', '$orderInfo', '$amount', '$orderType', '$transId', '$responseTime')";
         $mysqli->query($sql_update_momo);
     }
+
+    // Gửi email thông báo đơn hàng
+    $sql_items = "SELECT * FROM chitiethoadon,sanpham WHERE chitiethoadon.MaSP = sanpham.MaSP AND chitiethoadon.CodeDH = '$codedh'  ORDER BY sanpham.MaSP DESC";
+    $result_items = $mysqli->query($sql_items);
+    if (!$result_items) {
+        die("Lỗi truy vấn: " . $mysqli->error);
+    }
+
+    // Chuẩn bị nội dung cho các món hàng
+    $items_content = '';
+    $total_amount = 0; // Tổng tiền của tất cả món hàng
+
+    $items_content .= '<table width="630" align="center" cellpadding="0" cellspacing="0" border="1" style="table-layout:fixed;">';
+    $items_content .= '<thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Giá tiền</th>
+            <th>Số lượng</th>
+            <th>Tổng tiền</th>
+        </tr>
+    </thead>';
+    while ($row_item = mysqli_fetch_assoc($result_items)) {
+        $ten_san_pham = $row_item['TenSP'];
+        $gia_tien = number_format($row_item['GiaHienTai'], 0, '', '.'); // Định dạng tiền tệ
+        $so_luong = $row_item['SoLuongMua'];
+        $tong_tien = number_format($row_item['GiaHienTai'] * $so_luong, 0, '', '.');
+
+        $items_content .= '<tr>';
+        $items_content .= "<td> $ten_san_pham</td>";
+        $items_content .= "<td> $gia_tien ₫</td>";
+        $items_content .= "<td> $so_luong</td>";
+        $items_content .= "<td> $tong_tien ₫</td>";
+        $items_content .= '</tr>';
+
+        $total_amount += $row_item['GiaHienTai'] * $so_luong;
+    }
+
+    $items_content .= '</tbody>';
+    $items_content .= '</table>';
+
+    // Định dạng tổng tiền
+    $total_amount_formatted = number_format($total_amount, 0, '', '.');
+
+    // Nội dung email
+    $tieude = "Đơn hàng đã đặt thành công";
+    $to = $_SESSION['Email'];
+    $body = "
+    Chào bạn, đơn hàng của bạn đã được đặt thành công.<br/>
+    Mã đơn hàng: $codedh <br/>  
+    THÔNG TIN ĐƠN HÀNG: <br/>
+    - Tên người nhận: $TenNguoiNhan <br/>
+    - SĐT: $SDT <br/>
+    - Địa chỉ giao hàng: $DiaChiHD <br/>
+    - Thành tiền: $total_amount_formatted ₫ <br/>
+    - Ngày đặt hàng: " . date('d/m/Y H:i:s') . "<br/><br/>
+    THÔNG TIN CÁC MÓN HÀNG:<br/><br/>
+    $items_content <br/>
+    Cảm ơn bạn đã mua hàng tại website của chúng tôi.";
+    $mail = new Mailer();
+    $mail->send_mail($tieude, $to, $body);
 } else {
     $mesg = 'THANH TOÁN TẤT BẠI.';
 }

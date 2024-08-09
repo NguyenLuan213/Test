@@ -50,13 +50,13 @@ include '../admin/config/config.php';
                         <ul>
                             <?php
                             //require login.php                                
-                            if (isset($_SESSION['txtuser'])) {
+                            if (isset($_SESSION['MaND'])) {
                                 $sql1 = "SELECT * FROM nguoidung WHERE MaND=" . $_SESSION['MaND'];
                                 $result = mysqli_query($mysqli, $sql1);
                                 $row = mysqli_fetch_assoc($result);
                                 $ten_tach = explode(" ", $row["TenND"]);
                                 $ten = end($ten_tach);
-                                ?>
+                            ?>
 
 
                                 <li class="user-info">
@@ -95,13 +95,13 @@ include '../admin/config/config.php';
                                 } ?>
 
 
-                                <?php
+                            <?php
                             } else {
-                                ?>
+                            ?>
                                 <li><a href="login-form.php" class="title hidden-xs">Đăng Nhập</a></li>
                                 <li class="hidden-xs"><a href="signup-form.php">Đăng Ký</a></li>
                                 <!-- <li><a href="cart.php" class="title"><i class="fa fa-shopping-cart"></i> </a></li> -->
-                                <?php
+                            <?php
                             }
                             ?>
 
